@@ -11,14 +11,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Install pip
-        run: python -m pip install --upgrade pip
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
       - name: Install dependencies
-        run: pip install -e '.[dev]'
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --no-root --no-dev
 
       - name: Run tests
-        run: pytest life_expectancy --cov
+        run: poetry run pytest life_expectancy --cov
 
       - name: Run pylint
-        run: pylint life_expectancy.cleaning
+        run: poetry run pylint life_expectancy.cleaning
