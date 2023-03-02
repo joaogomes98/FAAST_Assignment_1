@@ -1,3 +1,5 @@
+[![ci](https://github.com/joaogomes98/FAAST_Assignment_1/actions/workflows/ci.yml/badge.svg?branch=ci)](https://github.com/joaogomes98/FAAST_Assignment_1/actions/workflows/ci.yml)
+
 # FAAST Advance Foundations Assignments
 
 ## Introduction
