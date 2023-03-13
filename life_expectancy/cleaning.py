@@ -1,13 +1,18 @@
-import re
+import argparse
+import logging
+from pathlib import Path
 import pandas as pd
-import numpy as np
 
 def load_data(filepath: str) -> pd.DataFrame:
     """
     Function responsible for loading the data.
     """
-
-    dataframe = pd.read_csv(filepath, delimiter='\t')
+    try:
+        dataframe = pd.read_csv(filepath, delimiter='\t')
+    except FileNotFoundError: #pragma: no cover
+        logging.error("File not found: The specified file does not exist.")
+    except PermissionError: #pragma: no cover
+        logging.error("Permission denied: You do not have permission to read the file.")
 
     # Split the first column into separate columns
     dataframe[['unit', 'sex', 'age', 'region']] = dataframe['unit,sex,age,geo\\time']\
@@ -31,14 +36,20 @@ def clean_data(dataframe: pd.DataFrame, country: str) -> pd.DataFrame:
     into integers and the values are converted into floats
     """
 
-    # Convert year to int
+    # Specify data types for the unit, sex, age and region columns
+    dtypes = {'unit': str, 'sex': str, 'age': str, 'region': str}
+
+    dataframe = dataframe.astype(dtypes)
+
+    # Convert year column to int
     dataframe['year'] =  pd.to_numeric(dataframe['year'], errors='coerce').astype(int)
 
-    # Apply the str_to_float method and perform data cleaning
-    dataframe['value'] = dataframe['value'].apply(str_to_float)
+    # Convert the value column to floats or NaNs, using regex
+    dataframe["value"] = dataframe["value"].str.replace(r"[^0-9.]+", "", regex=True)
+    dataframe["value"] = pd.to_numeric(dataframe["value"], errors="coerce")
 
     # Exclude all NaN values
-    dataframe = dataframe.dropna(subset=['value'])
+    dataframe = dataframe.dropna(subset=['value', 'year'])
 
     # Filter by region
     dataframe = dataframe[dataframe['region'] == country]
@@ -49,36 +60,40 @@ def save_data(dataframe: pd.DataFrame, filepath: str) -> None:
     """
     Function responsible for saving the data to a file.
     """
-
-    dataframe.to_csv(filepath, index=False)
-
-def str_to_float(val: str) -> float:
-    """
-    A helper function to convert a string value to a float number, 
-    or NaN (Not a Number) if the conversion is not possible.
-
-    If the input string has letters, they will be removed first.
-    """
     try:
-        # Try to convert the value to a float number
-        num = float(re.search(r'\d+\.*\d*', val).group(0))
-        return num
-    except (ValueError, AttributeError):
-        # If the conversion fails, return NaN
-        return np.nan
+        dataframe.to_csv(filepath, index=False)
+    except PermissionError: #pragma: no cover
+        logging.error("Permission denied: You do not have permission to write to the file.")
 
-def main() -> None:
+def main(country: str) -> None:
     """
     Main function responsible for executing the 3 steps -
     loading, cleaning and saving
     """
 
-    dataframe = load_data('life_expectancy/data/eu_life_expectancy_raw.tsv')
+    filepath = Path(__file__).resolve()
+    basepath = filepath.parent
 
-    dataframe = clean_data(dataframe, 'PT')
+    input_filepath = basepath/'data'/'eu_life_expectancy_raw.tsv'
+    output_filepath = basepath/'data'/'pt_life_expectancy.csv'
 
-    save_data(dataframe, 'life_expectancy/data/pt_life_expectancy.csv')
+    dataframe = load_data(input_filepath)
+
+    dataframe = clean_data(dataframe, country)
+
+    save_data(dataframe, output_filepath)
 
 
 if __name__ == "__main__":  # pragma: no cover
-    main()
+
+    # Create argument parser
+    parser = argparse.ArgumentParser(description='Clean life expectancy \
+        data for a specified country')
+    parser.add_argument('--country', type=str, default='PT', help='ISO code \
+        of country to filter by')
+
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Call clean_data with specified country
+    main(args.country)
