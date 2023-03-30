@@ -21,7 +21,7 @@ def main(country: str) -> None:
     dataframe = clean_data(dataframe, country)
 
     save_data(dataframe, output_filepath)
-    
+
     dataframe = dataframe.reset_index(drop=True)
 
     return dataframe
