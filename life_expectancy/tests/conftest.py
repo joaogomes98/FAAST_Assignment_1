@@ -8,6 +8,8 @@ from life_expectancy.data_loading import save_data
 
 from . import FIXTURES_DIR, OUTPUT_DIR
 
+DATA_DIR = "life_expectancy/data"
+
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests() -> None:
     """Fixture to execute commands before and after a test is run"""
@@ -20,20 +22,16 @@ def run_before_and_after_tests() -> None:
     file_path.unlink(missing_ok=True)
     
 @pytest.fixture(scope="session")
-def eu_life_expectancy_raw() -> pd.DataFrame:
+def eu_life_expectancy_raw_tsv() -> pd.DataFrame:
 
     """Fixture to load the raw life expectancy data"""
-    dataframe = load_data("life_expectancy/data/eu_life_expectancy_raw.tsv")
-    save_data(dataframe,FIXTURES_DIR/"eu_life_expectancy_raw.csv")
-    return dataframe
+    return pd.read_csv("life_expectancy/data/eu_life_expectancy_raw.tsv", delimiter='\t')
 
 @pytest.fixture(scope="session")
-def pt_life_expectancy_raw(eu_life_expectancy_raw) -> pd.DataFrame:
+def eu_life_expectancy_raw_csv() -> pd.DataFrame:
 
-    """Fixture to create the filtered expectancy dataframe"""
-    dataframe = clean_data(eu_life_expectancy_raw, "PT")
-    save_data(dataframe,FIXTURES_DIR/"pt_life_expectancy_expected.csv")
-    return dataframe
+    """Fixture to load the raw life expectancy data"""
+    return pd.read_csv(FIXTURES_DIR / "eu_life_expectancy_raw.csv")
 
 @pytest.fixture(scope="session")
 def pt_life_expectancy_expected() -> pd.DataFrame:
