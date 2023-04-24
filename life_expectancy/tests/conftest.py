@@ -25,7 +25,8 @@ def run_before_and_after_tests() -> None:
 def eu_life_expectancy_raw_tsv() -> pd.DataFrame:
 
     """Fixture to load the raw life expectancy data"""
-    return pd.read_csv("life_expectancy/data/eu_life_expectancy_raw.tsv", delimiter='\t')
+    filepath = FIXTURES_DIR / "eu_life_expectancy_raw.tsv"
+    return pd.read_csv(filepath, delimiter='\t')
 
 @pytest.fixture(scope="session")
 def eu_life_expectancy_raw_csv() -> pd.DataFrame:
