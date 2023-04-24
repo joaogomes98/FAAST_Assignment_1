@@ -23,4 +23,7 @@ jobs:
         run: pytest --cov-report html --cov=life_expectancy
 
       - name: Run pylint
-        run: pylint life_expectancy.cleaning
+        run: |
+          pylint life_expectancy.data_cleaning
+          pylint life_expectancy.data_loading
+          pylint life_expectancy.main
