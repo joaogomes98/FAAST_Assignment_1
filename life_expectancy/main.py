@@ -1,42 +1,48 @@
-import argparse
-from pathlib import Path
-from life_expectancy.data_loading import load_data
-from life_expectancy.data_loading import save_data
-from life_expectancy.data_cleaning import clean_data
+import os
+import pandas as pd
+import life_expectancy.data_loading as dl
+import life_expectancy.data_cleaning as dc
+from life_expectancy.region import Region
 
-def main(country: str) -> None:
+class Main:
     """
     Main function responsible for executing the 3 steps -
     loading, cleaning and saving
     """
 
-    filepath = Path(__file__).resolve()
-    basepath = filepath.parent
+    def __init__(self, input_file: str, output_file: str, country: Region) -> None:
+        self.input_file = input_file
+        self.output_file = output_file
+        self.country = country
 
-    input_filepath = basepath/'data'/'eu_life_expectancy_raw.tsv'
-    output_filepath = basepath/'data'/'pt_life_expectancy.csv'
+    def get_file_extension(self) -> str:
+        """
+        Returns the extension of the file in the given path.
+        """
+        extension = os.path.splitext(self.input_file)
+        return extension[1]
 
-    dataframe = load_data(input_filepath)
+    def main(self) -> pd.DataFrame:
+        """
+        Main function responsible for executing the 3 steps -
+        loading, cleaning and saving
+        """
 
-    dataframe = clean_data(dataframe, country)
+        file_format = self.get_file_extension()
+        datasaver = dl.DataSaver()
+        datacleaner = dc.DataCleaner(self.country)
 
-    save_data(dataframe, output_filepath)
+        if file_format == ".json":
+            dataloader = dl.LoaderPicker(dl.JsonLoader)
+            dataframe = dataloader.load_df(self.input_file)
+            dataframe = dataloader.normalize_df(dataframe)
 
-    dataframe = dataframe.reset_index(drop=True)
+        elif file_format == ".tsv":
+            dataloader = dl.LoaderPicker(dl.TsvLoader)
+            dataframe = dataloader.load_df(self.input_file)
+            dataframe = dataloader.normalize_df(dataframe)
 
-    return dataframe
+        dataframe = datacleaner.clean_data(dataframe)
+        datasaver.save_data(dataframe, self.output_file)
 
-
-if __name__ == "__main__":  # pragma: no cover
-
-    # Create argument parser
-    parser = argparse.ArgumentParser(description='Clean life expectancy \
-        data for a specified country')
-    parser.add_argument('--country', type=str, default='PT', help='ISO code \
-        of country to filter by')
-
-    # Parse arguments
-    args = parser.parse_args()
-
-    # Call clean_data with specified country
-    main(args.country)
+        return dataframe

@@ -1,40 +1,38 @@
 import pandas as pd
+from life_expectancy.region import Region
 
-def clean_data(dataframe: pd.DataFrame, country: str) -> pd.DataFrame:
+class DataCleaner:
     """
-    Function responsible for cleaning the data and 
-    filtering it according to a specific region.
-
-    The data cleaning follows this logic: the years are converted 
-    into integers and the values are converted into floats
+    Class responsible for cleaning data from a dataframe.
     """
-    # Split the first column into separate columns
-    dataframe[['unit', 'sex', 'age', 'region']] = dataframe['unit,sex,age,geo\\time']\
-        .str.split(',', expand=True)
+    def __init__(self, country: Region) -> None:
+        self.country = country.value
 
-    # Drop the original composed column
-    dataframe = dataframe.drop(columns=['unit,sex,age,geo\\time'])
+    def clean_data(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+        """
+        Function responsible for cleaning the data and 
+        filtering it according to a specific region.
 
-    # Unpivot data to long format
-    dataframe = dataframe.melt(id_vars=['unit','sex','age','region'], \
-        var_name='year', value_name='value')
+        The data cleaning follows this logic: the years are converted 
+        into integers and the values are converted into floats
+        """
 
-    # Specify data types for the unit, sex, age and region columns
-    dtypes = {'unit': str, 'sex': str, 'age': str, 'region': str}
+        # Specify data types for the unit, sex, age and region columns
+        dtypes = {'unit': str, 'sex': str, 'age': str, 'region': str, 'value': str}
 
-    dataframe = dataframe.astype(dtypes)
+        dataframe = dataframe.astype(dtypes)
 
-    # Convert year column to int
-    dataframe['year'] =  pd.to_numeric(dataframe['year'], errors='coerce').astype('int64')
+        # Convert year column to int
+        dataframe['year'] =  pd.to_numeric(dataframe['year'], errors='coerce').astype('int64')
 
-    # Convert the value column to floats or NaNs, using regex
-    dataframe["value"] = dataframe["value"].str.replace(r"[^0-9.]+", "", regex=True)
-    dataframe["value"] = pd.to_numeric(dataframe["value"], errors="coerce")
+        # Convert the value column to floats or NaNs, using regex
+        dataframe["value"] = dataframe["value"].str.replace(r"[^0-9.]+", "", regex=True)
+        dataframe["value"] = pd.to_numeric(dataframe["value"], errors="coerce")
 
-    # Exclude all NaN values
-    dataframe = dataframe.dropna(subset=['value', 'year'])
+        # Exclude all NaN values
+        dataframe = dataframe.dropna(subset=['value', 'year'])
 
-    # Filter by region
-    dataframe = dataframe[dataframe['region'] == country]
+        # Filter by region
+        dataframe = dataframe[dataframe['region'] == self.country]
 
-    return dataframe
+        return dataframe

@@ -1,14 +1,14 @@
 """Pytest configuration file"""
 import pandas as pd
 import pytest
-from pathlib import Path
-from life_expectancy.data_cleaning import clean_data
-from life_expectancy.data_loading import load_data
-from life_expectancy.data_loading import save_data
 
 from . import FIXTURES_DIR, OUTPUT_DIR
 
 DATA_DIR = "life_expectancy/data"
+ALL_COUNTRIES_LIST = ["AT","BE","BG","CH","CY","CZ","DK","EE","EL","ES","FI","FR","HR","HU","IS",\
+                    "IT","LI","LT","LU","LV","MT","NL","NO","PL","PT","RO","SE","SI","SK","DE",\
+                    "DE_TOT","AL","IE","ME","MK","RS","AM","AZ","GE","TR","UA","BY","UK","XK",\
+                    "FX","MD","SM","RU"]
 
 @pytest.fixture(autouse=True)
 def run_before_and_after_tests() -> None:
@@ -39,3 +39,15 @@ def pt_life_expectancy_expected() -> pd.DataFrame:
     
     """Fixture to load the expected output"""
     return pd.read_csv(FIXTURES_DIR / "pt_life_expectancy_expected.csv")
+
+@pytest.fixture(scope="session")
+def eurostat_life_expect_raw() -> pd.DataFrame:
+    
+    """Fixture to load the raw eurostat file"""
+    return pd.read_json(FIXTURES_DIR / "eurostat_life_expect.json")
+
+@pytest.fixture(scope="session")
+def expected_countries_list() -> pd.DataFrame:
+    
+    """Fixture to return the list of all countries in enum"""
+    return ALL_COUNTRIES_LIST
