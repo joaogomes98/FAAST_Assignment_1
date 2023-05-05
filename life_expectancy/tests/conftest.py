@@ -47,6 +47,12 @@ def eurostat_life_expect_raw() -> pd.DataFrame:
     return pd.read_json(FIXTURES_DIR / "eurostat_life_expect.json")
 
 @pytest.fixture(scope="session")
+def eurostat_life_expectancy_expected() -> pd.DataFrame:
+    
+    """Fixture to load the raw eurostat file"""
+    return pd.read_csv(FIXTURES_DIR / "eurostat_life_expectancy_expected.csv")
+
+@pytest.fixture(scope="session")
 def expected_countries_list() -> pd.DataFrame:
     
     """Fixture to return the list of all countries in enum"""

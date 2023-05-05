@@ -12,6 +12,7 @@ class DataLoader(ABC):
         Abstract method for loading the data.
         """
 
+    @abstractmethod
     def normalize_data(self, dataframe: pd.DataFrame) -> pd.DataFrame:
         """
         Abstract method for normalizing the data.

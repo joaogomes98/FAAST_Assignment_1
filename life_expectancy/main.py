@@ -1,48 +1,57 @@
 import os
+import argparse
 import pandas as pd
 import life_expectancy.data_loading as dl
 import life_expectancy.data_cleaning as dc
 from life_expectancy.region import Region
 
-class Main:
+DEFAULT_INPUT_FILE = "life_expectancy/data/eu_life_expectancy_raw.tsv"
+DEFAULT_OUTPUT_FILE = "life_expectancy/output/pt_life_expectancy.csv"
+
+def get_file_extension(input_file: str) -> str:
+    """
+    Returns the extension of the file in the given path.
+    """
+    extension = os.path.splitext(input_file)
+    return extension[1]
+
+def main(input_file: str, output_file: str, country: Region) -> pd.DataFrame:
     """
     Main function responsible for executing the 3 steps -
     loading, cleaning and saving
     """
 
-    def __init__(self, input_file: str, output_file: str, country: Region) -> None:
-        self.input_file = input_file
-        self.output_file = output_file
-        self.country = country
+    file_format = get_file_extension(input_file)
+    datasaver = dl.DataSaver()
+    datacleaner = dc.DataCleaner(country)
 
-    def get_file_extension(self) -> str:
-        """
-        Returns the extension of the file in the given path.
-        """
-        extension = os.path.splitext(self.input_file)
-        return extension[1]
+    if file_format == ".json":
+        dataloader = dl.LoaderPicker(dl.JsonLoader)
 
-    def main(self) -> pd.DataFrame:
-        """
-        Main function responsible for executing the 3 steps -
-        loading, cleaning and saving
-        """
+    elif file_format == ".tsv":
+        dataloader = dl.LoaderPicker(dl.TsvLoader)
 
-        file_format = self.get_file_extension()
-        datasaver = dl.DataSaver()
-        datacleaner = dc.DataCleaner(self.country)
+    dataframe = dataloader.load_df(input_file)
+    dataframe = dataloader.normalize_df(dataframe)
+    dataframe = datacleaner.clean_data(dataframe)
+    datasaver.save_data(dataframe, output_file)
 
-        if file_format == ".json":
-            dataloader = dl.LoaderPicker(dl.JsonLoader)
-            dataframe = dataloader.load_df(self.input_file)
-            dataframe = dataloader.normalize_df(dataframe)
+    return dataframe
 
-        elif file_format == ".tsv":
-            dataloader = dl.LoaderPicker(dl.TsvLoader)
-            dataframe = dataloader.load_df(self.input_file)
-            dataframe = dataloader.normalize_df(dataframe)
+if __name__ == "__main__":  # pragma: no cover
 
-        dataframe = datacleaner.clean_data(dataframe)
-        datasaver.save_data(dataframe, self.output_file)
+    # Create argument parser
+    parser = argparse.ArgumentParser(description='Clean life expectancy \
+        data for a specified country')
+    parser.add_argument('--input_file', type=str, default= DEFAULT_INPUT_FILE,
+                        help='Path to input file')
+    parser.add_argument('--output_file', type=str, default= DEFAULT_OUTPUT_FILE,
+                        help='Path to output file')
+    parser.add_argument('--country', type=str, default='PT', help='ISO code \
+        of country to filter by')
 
-        return dataframe
+    # Parse arguments
+    args = parser.parse_args()
+
+    # Call clean_data with specified country
+    main(args.input_file, args.output_file, args.country)

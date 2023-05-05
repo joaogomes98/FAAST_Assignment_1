@@ -5,7 +5,7 @@ class Region(Enum):
     """
     Region enum class
     """
-    
+
     AT = "AT"
     BE = "BE"
     BG = "BG"
@@ -69,13 +69,13 @@ class Region(Enum):
         Lists all values for the enum
         """
         eu_totals = [
-            cls.EA18, 
-            cls.EA19, 
-            cls.EEA30_2007, 
-            cls.EEA31, 
-            cls.EFTA, 
-            cls.EU27_2007, 
-            cls.EU27_2020, 
-            cls.EU28, 
+            cls.EA18,
+            cls.EA19,
+            cls.EEA30_2007,
+            cls.EEA31,
+            cls.EFTA,
+            cls.EU27_2007,
+            cls.EU27_2020,
+            cls.EU28,
             ]
         return [region.value for region in Region if region not in eu_totals]
