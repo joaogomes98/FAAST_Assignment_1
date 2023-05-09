@@ -28,8 +28,8 @@ jobs:
           pylint life_expectancy.data_loading
           pylint life_expectancy.main
           pylint life_expectancy.region
-          pylint life_expectancy_tests_conftest
-          pylint life_expectancy_tests_test_cleaning
-          pylint life_expectancy_tests_test_loading
-          pylint life_expectancy_tests_test_main
-          pylint life_expectancy_tests_test_region
+          pylint life_expectancy.tests.conftest
+          pylint life_expectancy.tests.test_cleaning
+          pylint life_expectancy.tests.test_loading
+          pylint life_expectancy.tests.test_main
+          pylint life_expectancy.tests.test_region
