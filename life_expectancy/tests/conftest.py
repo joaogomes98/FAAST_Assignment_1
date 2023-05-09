@@ -20,7 +20,7 @@ def run_before_and_after_tests() -> None:
     # Teardown : fill with any logic you want
     file_path = OUTPUT_DIR / "pt_life_expectancy.csv"
     file_path.unlink(missing_ok=True)
-    
+
 @pytest.fixture(scope="session")
 def eu_life_expectancy_raw_tsv() -> pd.DataFrame:
 
@@ -36,24 +36,24 @@ def eu_life_expectancy_raw_csv() -> pd.DataFrame:
 
 @pytest.fixture(scope="session")
 def pt_life_expectancy_expected() -> pd.DataFrame:
-    
+
     """Fixture to load the expected output"""
     return pd.read_csv(FIXTURES_DIR / "pt_life_expectancy_expected.csv")
 
 @pytest.fixture(scope="session")
 def eurostat_life_expect_raw() -> pd.DataFrame:
-    
+
     """Fixture to load the raw eurostat file"""
     return pd.read_json(FIXTURES_DIR / "eurostat_life_expect.json")
 
 @pytest.fixture(scope="session")
 def eurostat_life_expectancy_expected() -> pd.DataFrame:
-    
+
     """Fixture to load the raw eurostat file"""
     return pd.read_csv(FIXTURES_DIR / "eurostat_life_expectancy_expected.csv")
 
 @pytest.fixture(scope="session")
 def expected_countries_list() -> pd.DataFrame:
-    
+
     """Fixture to return the list of all countries in enum"""
     return ALL_COUNTRIES_LIST
