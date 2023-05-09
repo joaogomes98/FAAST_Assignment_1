@@ -1,5 +1,4 @@
 """Tests for the main module"""
-from unittest import mock
 import pandas as pd
 from life_expectancy.main import main
 from life_expectancy.region import Region
