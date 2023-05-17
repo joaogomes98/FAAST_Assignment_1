@@ -47,7 +47,7 @@ if __name__ == "__main__":  # pragma: no cover
                         help='Path to input file')
     parser.add_argument('--output_file', type=str, default= DEFAULT_OUTPUT_FILE,
                         help='Path to output file')
-    parser.add_argument('--country', type=str, default='PT', help='ISO code \
+    parser.add_argument('--country', type=Region, default=Region.PT, help='ISO code \
         of country to filter by')
 
     # Parse arguments
