@@ -24,7 +24,7 @@ def test_load_data_json(eurostat_life_expect_raw: pd.DataFrame) -> None:
     dataframe = dataloader.load_df(filepath)
     pd.testing.assert_frame_equal(dataframe, eurostat_life_expect_raw)
 
-@mock.patch("life_expectancy.data_loading.pd.DataFrame.to_csv") 
+@mock.patch("life_expectancy.data_loading.pd.DataFrame.to_csv")
 def test_save_data(mock_to_csv, pt_life_expectancy_expected: pd.DataFrame) -> None:
 
     """
