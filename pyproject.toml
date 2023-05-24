@@ -3,9 +3,9 @@ name = "assignments"
 version = "0.0.1"
 readme = "README.md"
 requires-python = ">=3.8"
-description = "First assignment of the FAAST Advance Foundations"
+description = "FAAST Assignments"
 authors = [
-    {name = "Fernando Cordeiro<fernando@daredata.engineering>"}
+    {name = "João Gomes"}
 ]
 dependencies = ["pandas"]
 

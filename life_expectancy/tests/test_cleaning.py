@@ -5,7 +5,7 @@ import life_expectancy.data_loading as dl
 from life_expectancy.region import Region
 
 def test_clean_data_tsv(eu_life_expectancy_raw_tsv: pd.DataFrame,
-                        pt_life_expectancy_expected: pd.DataFrame):
+                        pt_life_expectancy_expected: pd.DataFrame) -> None:
 
     """
     Test for the clean_data function
@@ -17,7 +17,7 @@ def test_clean_data_tsv(eu_life_expectancy_raw_tsv: pd.DataFrame,
     pd.testing.assert_frame_equal(dataframe, pt_life_expectancy_expected)
 
 def test_clean_data_json(eurostat_life_expect_raw: pd.DataFrame,
-                        pt_life_expectancy_expected: pd.DataFrame):
+                        pt_life_expectancy_expected: pd.DataFrame) -> None:
 
     """
     Test for the clean_data function

@@ -3,7 +3,7 @@ import numpy as np
 from life_expectancy.region import Region
 
 
-def test_all_regions(expected_countries_list: List[str]):
+def test_all_regions(expected_countries_list: List[str]) -> None:
 
     """
     Test for the obtaining of a countries list.

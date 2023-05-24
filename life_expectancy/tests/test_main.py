@@ -9,7 +9,7 @@ EUROSTAT_EXPECTANCY_FILEPATH_JSON = OUTPUT_DIR / "eurostat_life_expect.json"
 PT_EXPECTANCY_FILEPATH = OUTPUT_DIR / "pt_life_expectancy.csv"
 EUROSTAT_EXPECTANCY_FILEPATH = FIXTURES_DIR / "eurostat_life_expectancy_expected.csv"
 
-def test_main_csv(pt_life_expectancy_expected: pd.DataFrame):
+def test_main_csv(pt_life_expectancy_expected: pd.DataFrame) -> None:
     """
     Function to test the main module (csv)
     """
@@ -20,7 +20,7 @@ def test_main_csv(pt_life_expectancy_expected: pd.DataFrame):
 
     pd.testing.assert_frame_equal(pt_life_expectancy_actual, pt_life_expectancy_expected)
 
-def test_main_json(eurostat_life_expectancy_expected: pd.DataFrame):
+def test_main_json(eurostat_life_expectancy_expected: pd.DataFrame) -> None:
 
     """
     Function to test the main module (csv)

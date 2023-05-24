@@ -1,9 +1,10 @@
-import os
 import argparse
+from pathlib import Path
 import pandas as pd
 import life_expectancy.data_loading as dl
 import life_expectancy.data_cleaning as dc
 from life_expectancy.region import Region
+
 
 DEFAULT_INPUT_FILE = "life_expectancy/data/eu_life_expectancy_raw.tsv"
 DEFAULT_OUTPUT_FILE = "life_expectancy/output/pt_life_expectancy.csv"
@@ -12,8 +13,9 @@ def get_file_extension(input_file: str) -> str:
     """
     Returns the extension of the file in the given path.
     """
-    extension = os.path.splitext(input_file)
-    return extension[1]
+    path = Path(input_file)
+    return path.suffix
+
 
 def main(input_file: str, output_file: str, country: Region) -> pd.DataFrame:
     """
