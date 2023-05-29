@@ -23,5 +23,6 @@ omit = [
 [tool.pylint."messages control"]
 disable = [
    "missing-module-docstring",
-   "too-few-public-methods"
+   "too-few-public-methods",
+   "broad-exception-caught"
 ]

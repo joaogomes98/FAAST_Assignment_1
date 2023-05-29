@@ -1,4 +1,6 @@
 import argparse
+import sys
+import logging
 from pathlib import Path
 import pandas as pd
 import life_expectancy.data_loading as dl
@@ -39,9 +41,20 @@ def main(input_file: str, output_file: str, country: Region) -> pd.DataFrame:
     dataframe = datacleaner.clean_data(dataframe)
     datasaver.save_data(dataframe, output_file)
 
+    logging.info("Data cleaning and saving completed successfully.")
+
     return dataframe
 
 if __name__ == "__main__":  # pragma: no cover
+
+    # Set up logging
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+        ]
+    )
 
     # Create argument parser
     parser = argparse.ArgumentParser(description='Clean life expectancy \
@@ -56,5 +69,8 @@ if __name__ == "__main__":  # pragma: no cover
     # Parse arguments
     args = parser.parse_args()
 
-    # Call clean_data with specified country
-    main(args.input_file, args.output_file, args.country)
+    try:
+        # Call clean_data with specified country
+        main(args.input_file, args.output_file, args.country)
+    except Exception as e:
+        logging.error("An error occurred during data cleaning and saving: %s", str(e))
