@@ -85,14 +85,14 @@ class LoaderPicker:
         """
         Function responsible for calling load_data method
         """
-        dataframe = self.dataloader.load_data(self,filepath)
+        dataframe = self.dataloader.load_data(filepath)
         return dataframe
 
     def normalize_df(self, dataframe: pd.DataFrame) -> pd.DataFrame:
         """
         Function responsible for calling normalize_data method
         """
-        dataframe = self.dataloader.normalize_data(self,dataframe)
+        dataframe = self.dataloader.normalize_data(dataframe)
         return dataframe
 
 class DataSaver:

@@ -26,12 +26,13 @@ def main(input_file: str, output_file: str, country: Region) -> pd.DataFrame:
     file_format = get_file_extension(input_file)
     datasaver = dl.DataSaver()
     datacleaner = dc.DataCleaner(country)
+    dataloader = dl.LoaderPicker(dl.TsvLoader())
 
     if file_format == ".json":
-        dataloader = dl.LoaderPicker(dl.JsonLoader)
+        dataloader = dl.LoaderPicker(dl.JsonLoader())
 
     elif file_format == ".tsv":
-        dataloader = dl.LoaderPicker(dl.TsvLoader)
+        dataloader = dl.LoaderPicker(dl.TsvLoader())
 
     dataframe = dataloader.load_df(input_file)
     dataframe = dataloader.normalize_df(dataframe)

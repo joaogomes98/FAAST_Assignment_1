@@ -10,7 +10,7 @@ def test_clean_data_tsv(eu_life_expectancy_raw_tsv: pd.DataFrame,
     """
     Test for the clean_data function
     """
-    dataloader = dl.LoaderPicker(dl.TsvLoader)
+    dataloader = dl.LoaderPicker(dl.TsvLoader())
     dataframe = dataloader.normalize_df(eu_life_expectancy_raw_tsv)
     datacleaner = dc.DataCleaner(Region.PT)
     dataframe = datacleaner.clean_data(dataframe).reset_index(drop=True)
@@ -22,7 +22,7 @@ def test_clean_data_json(eurostat_life_expect_raw: pd.DataFrame,
     """
     Test for the clean_data function
     """
-    dataloader = dl.LoaderPicker(dl.JsonLoader)
+    dataloader = dl.LoaderPicker(dl.JsonLoader())
     dataframe = dataloader.normalize_df(eurostat_life_expect_raw)
     datacleaner = dc.DataCleaner(Region.PT)
     dataframe = datacleaner.clean_data(dataframe).reset_index(drop=True)

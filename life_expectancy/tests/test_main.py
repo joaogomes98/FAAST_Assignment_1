@@ -4,10 +4,10 @@ from life_expectancy.main import main
 from life_expectancy.region import Region
 from . import OUTPUT_DIR, FIXTURES_DIR
 
-EU_RAW_FILEPATH_CSV = OUTPUT_DIR / "eu_life_expectancy_raw.tsv"
-EUROSTAT_EXPECTANCY_FILEPATH_JSON = OUTPUT_DIR / "eurostat_life_expect.json"
-PT_EXPECTANCY_FILEPATH = OUTPUT_DIR / "pt_life_expectancy.csv"
-EUROSTAT_EXPECTANCY_FILEPATH = FIXTURES_DIR / "eurostat_life_expectancy_expected.csv"
+EU_RAW_FILEPATH_CSV = str(OUTPUT_DIR / "eu_life_expectancy_raw.tsv")
+EUROSTAT_EXPECTANCY_FILEPATH_JSON = str(OUTPUT_DIR / "eurostat_life_expect.json")
+PT_EXPECTANCY_FILEPATH = str(OUTPUT_DIR / "pt_life_expectancy.csv")
+EUROSTAT_EXPECTANCY_FILEPATH = str(FIXTURES_DIR / "eurostat_life_expectancy_expected.csv")
 
 def test_main_csv(pt_life_expectancy_expected: pd.DataFrame) -> None:
     """
